@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="A simple straightforward prayer time">
+    <meta name="keywords" content="simple, prayer, time">
+    <meta name="author" content="Hanfie Vandanu">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Prayer Times</title>
+
+    <link rel="manifest" href="manifest.json">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Prayer Times">
+    <link rel="apple-touch-icon" href="images/icons/152.png">
+    <meta name="theme-color" content="#000000" />
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+
+    <!-- iOS launch screen -->
+    <!-- iPhone Xs Max (1242px x 2688px) -->
+    <link rel="apple-touch-startup-image"
+        media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)"
+        href="images/launchscreen/apple-launch-1242x2688.png">
+    <!-- iPhone Xr (828px x 1792px) -->
+    <link rel="apple-touch-startup-image"
+        media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)"
+        href="images/launchscreen/apple-launch-828x1792.png">
+    <!-- iPhone X, Xs (1125px x 2436px) -->
+    <link rel="apple-touch-startup-image"
+        media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)"
+        href="images/launchscreen/apple-launch-1125x2436.png">
+    <!-- iPhone 8 Plus, 7 Plus, 6s Plus, 6 Plus (1242px x 2208px) -->
+    <link rel="apple-touch-startup-image"
+        media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)"
+        href="images/launchscreen/apple-launch-1242x2208.png">
+    <!-- iPhone 8, 7, 6s, 6 (750px x 1334px) -->
+    <link rel="apple-touch-startup-image"
+        media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
+        href="images/launchscreen/apple-launch-750x1334.png">
+    <!-- iPad Pro 12.9" (2048px x 2732px) -->
+    <link rel="apple-touch-startup-image"
+        media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
+        href="images/launchscreen/apple-launch-2048x2732.png">
+    <!-- iPad Pro 11” (1668px x 2388px) -->
+    <link rel="apple-touch-startup-image"
+        media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)"
+        href="images/launchscreen/apple-launch-1668x2388.png">
+    <!-- iPad Pro 10.5" (1668px x 2224px) -->
+    <link rel="apple-touch-startup-image"
+        media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)"
+        href="images/launchscreen/apple-launch-1668x2224.png">
+    <!-- iPad Mini, Air (1536px x 2048px) -->
+    <link rel="apple-touch-startup-image"
+        media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)"
+        href="images/launchscreen/apple-launch-1536x2048.png">
+</head>
+
+<body>
+    <div class="container">
+        <div id="clock"></div>
+        <div class="flip-card" style="margin-top: 10px">
+            <div id="front" class="flip-card-inner">
+                <div class="flip-card-front" onclick="flip()">
+                    <img alt="Photo" src="https://source.unsplash.com/1600x900/?nature" width=100%>
+                    <div id='lainnya' class="lainnya">
+                        <div id="date"></div>
+                        <div id="location" onclick="flip()">Select Location <i class="far fa-compass"></i></div>
+                        <div id="nextPrayerName"></div>
+                        <div id="nextPrayerTime"></div>
+                        <div id="timeRemaining"></div>
+                        <br>
+                        <table>
+                            <tr>
+                                <td>Fajr</td>
+                                <td class="prayTime"></td>
+                                <td id='fajr' class="prayTime">--:--</td>
+                            </tr>
+                            <tr>
+                                <td>Dhuhr</td>
+                                <td class="prayTime"></td>
+                                <td id='dhuhr' class="prayTime">--:--</td>
+                            </tr>
+                            <tr>
+                                <td>Asr</td>
+                                <td class="prayTime"></td>
+                                <td id='asr' class="prayTime">--:--</td>
+                            </tr>
+                            <tr>
+                                <td>Maghrib</td>
+                                <td class="prayTime"></td>
+                                <td id='maghrib' class="prayTime">--:--</td>
+                            </tr>
+                            <tr>
+                                <td>Isha</td>
+                                <td class="prayTime"></td>
+                                <td id='isha' class="prayTime">--:--</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div id="back" class="flip-card-back">
+                    <form onSubmit="return false;">
+                        <div class="form-group">
+                            <label for="formGroupExampleInput" style="color: #ffffff;">Location</label>
+                            <input type="search" id="city" placeholder="Select Location" />
+                            <button type="button" class="btn btn-block secondary" onclick="getLocation()"><i
+                                    class="fas fa-map-marker-alt" href=#></i> Use Current Location</button>
+
+                        </div>
+                        <br>
+                        <div class="form-group" style="color: #ffffff; text-align: center;">
+                            <button type="button" class="btn btn-block primary" onclick="flipdua(); saveLocation()"><i
+                                    class="fas fa-save"></i> Save Changes</button> <br>
+                            <small>Prayer times by <a href="https://prayertimes.date/">prayertimes.date</a> <br> Reverse
+                                Geocoding by <a href="https://locationiq.com/">LocationIQ</a></small>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/places.js@1.19.0"></script>
+    <script src="https://kit.fontawesome.com/852256175b.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/moment.js" type="text/javascript"></script>
+    <script src="assets/js/app.js" async defer></script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker
+                .register('sw.js')
+                .then(function () {
+                    console.log("Service Worker Registered");
+                });
+        }
+    </script>
+    <script>
+        var lat = '';
+        var lng = '';
+        var city = '';
+        var placesAutocomplete = places({
+            appId: 'plY90YSWJBXF',
+            apiKey: 'c273edeaa7ae9e0e9d7e1bfb87ebb3bc',
+            container: document.querySelector('#city'),
+        }).configure({
+            type: 'city',
+            aroundLatLngViaIP: false,
+        });
+        placesAutocomplete.on('change', e => {
+            console.log(e.suggestion)
+            lat = e.suggestion.latlng.lat;
+            lng = e.suggestion.latlng.lng;
+            city = e.suggestion.name;
+        });
+    </script>
+</body>
+
+</html>
