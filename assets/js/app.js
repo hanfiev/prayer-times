@@ -1,3 +1,17 @@
+//notification permission
+Notification.requestPermission(function (status) {
+    console.log('Notification permission status:', status);
+});
+
+//notification
+function displayNotification(prayerName, time) {
+    if (Notification.permission == 'granted') {
+        navigator.serviceWorker.getRegistration().then(function (reg) {
+            reg.showNotification('(' + time + ')' + ' it is ' + prayerName + ' time');
+        });
+    }
+}
+
 //declare var
 var weekday = new Array(7);
 weekday[0] = "Sunday";
@@ -72,9 +86,10 @@ function timeUpdate() {
     date = d.getDate() + ' ' + monthName[d.getMonth()] + ' ' + d.getFullYear();
     document.getElementById('clock').innerHTML = time;
 
-    var hour = d.getHours();
-    var minute = ('0' + d.getMinutes()).slice(-2);
-    var timeID = hour + minute;
+    hour = d.getHours();
+    minute = ('0' + d.getMinutes()).slice(-2);
+
+    timeID = hour + minute;
     setTimeout(timeUpdate, 500);
 
     if (localStorage.getItem('city') != null) {
@@ -91,18 +106,27 @@ function nextPrayerFilter() {
 
     activeList = prayerObj.filter(fil);
 
-    // if (activeList = []) {
-    // document.getElementById('nextPrayerName').innerHTML = 'Fajr';
-    // document.getElementById('nextPrayerTime').innerHTML = fajrTime;
-    // timeRemaining = moment(fajrTime, "HH:mm").fromNow()
-    // document.getElementById('timeRemaining').innerHTML = timeRemaining;
-    // } else {
-    document.getElementById('nextPrayerName').innerHTML = activeList[0].name;
-    document.getElementById('nextPrayerTime').innerHTML = activeList[0].time;
-    //udah dapet, waktu ibadah yang paling deket ama waktu sekarang, push.
-    timeRemaining = moment(activeList[0].time, "HH:mm").fromNow()
-    document.getElementById('timeRemaining').innerHTML = timeRemaining;
-    // }
+    if (activeList = []) {
+
+        document.getElementById('nextPrayerName').innerHTML = 'Fajr';
+        document.getElementById('nextPrayerTime').innerHTML = fajrTime;
+        timeRemaining = moment(fajrTime, "HH:mm").fromNow()
+        document.getElementById('timeRemaining').innerHTML = timeRemaining;
+
+    } else {
+
+        document.getElementById('nextPrayerName').innerHTML = activeList[0].name;
+        document.getElementById('nextPrayerTime').innerHTML = activeList[0].time;
+        //udah dapet, waktu ibadah yang paling deket ama waktu sekarang, push.
+        timeRemaining = moment(activeList[0].time, "HH:mm").fromNow()
+        document.getElementById('timeRemaining').innerHTML = timeRemaining;
+
+        if (activeList[0].time == time) {
+            displayNotification(activeList[0].name, activeList[0].time)
+        }
+    }
+
+
 }
 
 //card function
@@ -159,7 +183,7 @@ function saveLocation() {
     localStorage.setItem('lat', lat);
     localStorage.setItem('lng', lng);
     getPrayerTimes();
-    document.getElementById('location').innerHTML = city + ' <i class="far fa-compass"></i>'
+    document.getElementById('location').innerHTML = city + ' <i class="fas fa-cog"></i>'
     document.getElementById('city').placeholder = city
 }
 
@@ -170,7 +194,7 @@ function checkStorage() {
         lng = localStorage.getItem('lng');
         city = localStorage.getItem('city')
         document.getElementById('city').placeholder = city
-        document.getElementById('location').innerHTML = city + ' <i class="far fa-compass"></i>'
+        document.getElementById('location').innerHTML = city + ' <i class="fas fa-cog"></i>'
         setTimeout(getPrayerTimes, 1000)
 
     } else {
