@@ -106,7 +106,7 @@ function nextPrayerFilter() {
 
     activeList = prayerObj.filter(fil);
 
-    if (activeList = []) {
+    if (activeList.length == 0) {
 
         document.getElementById('nextPrayerName').innerHTML = 'Fajr';
         document.getElementById('nextPrayerTime').innerHTML = fajrTime;
