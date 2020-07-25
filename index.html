@@ -62,14 +62,21 @@
 
 <body>
     <div class="container">
-        <div id="clock"></div>
+
+
+        <table>
+            <tr>
+                <td id="clock"></td>
+                <td class='cog' style="text-align: right; " onclick="flip()"><i class="fas fa-cog"></i></td>
+            </tr>
+        </table>
         <div class="flip-card" style="margin-top: 10px">
             <div id="front" class="flip-card-inner">
-                <div class="flip-card-front" >
+                <div class="flip-card-front">
                     <img onclick="flip()" alt="Photo" src="https://source.unsplash.com/1600x900/?nature" width=100%>
                     <div id='lainnya' class="lainnya">
                         <div id="date"></div>
-                        <div id="location" onclick="flip()">Select Location <i class="fas fa-cog"></i></div>
+                        <div id="location">Select Location </div>
                         <div id="nextPrayerName"></div>
                         <div id="nextPrayerTime"></div>
                         <div id="timeRemaining"></div>
@@ -104,18 +111,29 @@
                     </div>
                 </div>
                 <div id="back" class="flip-card-back">
+                    <table>
+                        <tr>
+                            <td>Notification</td>
+                            <td style="text-align: right; ">
+                                <label class="switch" onchange="notificationSwitch()">
+                                    <input type="checkbox" id="switch">
+                                    <span class="slider round"></span>
+                                </label></td>
+                        </tr>
+                    </table>
                     <form onSubmit="return false;">
                         <div class="form-group">
                             <label for="formGroupExampleInput" style="color: #ffffff;">Location</label>
                             <input type="search" id="city" placeholder="Select Location" />
-                            <button type="button" class="btn btn-block secondary" onclick="getLocation()"><i
+                            
+                            <button type="button" class="btn btn-block secondary" style="margin-top: 10px; border: 1px solid white" onclick="getLocation()"><i
                                     class="fas fa-map-marker-alt" href=#></i> Use Current Location</button>
-
                         </div>
-                        <br>
-                        <div class="form-group" style="color: #ffffff; text-align: center;">
-                            <button type="button" class="btn btn-block primary" onclick="flipdua(); saveLocation()"><i
-                                    class="fas fa-save"></i> Save Changes</button> <br>
+
+
+                        <div
+                            style="position: relative; top: 10px; margin-top: 20px; color: #ffffff; text-align: center;">
+                            <button type="button" class="btn btn-block" style="background-color: #f51d46;color: #ffffff;" onclick="flipdua(); saveLocation()">Save</button> <br>
                             <small>Prayer times by <a href="https://prayertimes.date/">prayertimes.date</a> <br> Reverse
                                 Geocoding by <a href="https://locationiq.com/">LocationIQ</a></small>
                         </div>
