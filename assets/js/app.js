@@ -13,6 +13,8 @@ function displayNotification(prayerName, time) {
 }
 
 //declare var
+var nSwitch = ''
+
 var weekday = new Array(7);
 weekday[0] = "Sunday";
 weekday[1] = "Monday";
@@ -35,7 +37,6 @@ monthName[8] = "September";
 monthName[9] = "October";
 monthName[10] = "November";
 monthName[11] = "December";
-
 
 var d = new Date();
 var time = d.getHours() + ':' + ('0' + d.getMinutes()).slice(-2);
@@ -78,7 +79,6 @@ var city = 'bandung';
 window.onload = timeUpdate()
 window.onload = checkStorage()
 
-
 function timeUpdate() {
     d = new Date();
     time = d.getHours() + ':' + ('0' + d.getMinutes()).slice(-2);
@@ -91,6 +91,7 @@ function timeUpdate() {
 
     timeID = hour + minute;
     setTimeout(timeUpdate, 500);
+    
 
     if (localStorage.getItem('city') != null) {
         // kalo udah ada setingan sebelumnya 
@@ -121,23 +122,41 @@ function nextPrayerFilter() {
         timeRemaining = moment(activeList[0].time, "HH:mm").fromNow()
         document.getElementById('timeRemaining').innerHTML = timeRemaining;
 
-        if (activeList[0].time == time) {
-            displayNotification(activeList[0].name, activeList[0].time)
+        if (nSwitch == 1){
+            checkNotification();
         }
+        
     }
-
-
 }
+
+//fungsi buat ngecek adzan, ketika waktu adzan match sama waktu existing call notification
+//set adhanOnce ke false, reactivate dalam 70s. biar notifnya ga direpeat terus selama semenit.
+
+let adhanOnce = true;
+let receiveNotification = true;
+function checkNotification(){
+    
+    console.log('ngecek notif')
+    if (receiveNotification && adhanOnce && activeList[0].time==time) {
+        displayNotification(activeList[0].name, activeList[0].time)
+        adhanOnce = false;
+        setTimeout(function(){ adhanOnce = true }, 70000);
+    }
+}
+
 
 //card function
 function flip() {
     document.getElementById('front').style.transform = "rotateY(180deg)";
     $(".lainnya").fadeOut();
+    $(".cog").hide();
+
 }
 
 function flipdua() {
     document.getElementById('front').style.transform = "rotateY(0deg)";
     $(".lainnya").fadeIn();
+    $(".cog").show();
 
 }
 
@@ -183,7 +202,7 @@ function saveLocation() {
     localStorage.setItem('lat', lat);
     localStorage.setItem('lng', lng);
     getPrayerTimes();
-    document.getElementById('location').innerHTML = city + ' <i class="fas fa-cog"></i>'
+    document.getElementById('location').innerHTML = city
     document.getElementById('city').placeholder = city
 }
 
@@ -194,7 +213,9 @@ function checkStorage() {
         lng = localStorage.getItem('lng');
         city = localStorage.getItem('city')
         document.getElementById('city').placeholder = city
-        document.getElementById('location').innerHTML = city + ' <i class="fas fa-cog"></i>'
+        document.getElementById('location').innerHTML = city
+        nSwitch = localStorage.getItem('nSwitch')
+        if (nSwitch == 1) {document.getElementById("switch").checked = true;};
         setTimeout(getPrayerTimes, 1000)
 
     } else {
@@ -272,4 +293,18 @@ function getPrayerTimes() {
 
             setTimeout(nextPrayerFilter, 1000);
         })
+}
+
+if (nSwitch.toString().length == 0) {nSwitch = 0}
+function notificationSwitch(){
+
+    if (nSwitch == 0) {
+        nSwitch = 1 
+        console.log(nSwitch)
+    } else {
+        nSwitch = 0;
+        console.log(nSwitch)
+    }
+    localStorage.setItem('nSwitch', nSwitch);
+
 }
